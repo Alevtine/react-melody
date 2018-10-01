@@ -22,7 +22,7 @@ class GameArtist extends React.Component {
 
           <form className="game__artist">
             <div className="artist">
-              <input className="artist__input visually-hidden" onChange={this.handleChange} type="radio" name="answer" value="artist-1" id="answer-1" />
+              <input className="artist__input visually-hidden" onChange={() => this.handleChange()} type="radio" name="answer" value="artist-1" id="answer-1" />
               <label className="artist__name" htmlFor="answer-1">
                 <img className="artist__picture" src="http://placehold.it/134x134" alt="Пелагея" />
                 Пелагея
@@ -30,7 +30,7 @@ class GameArtist extends React.Component {
             </div>
 
             <div className="artist">
-              <input className="artist__input visually-hidden" onChange={this.handleChange} type="radio" name="answer" value="artist-2" id="answer-2" />
+              <input className="artist__input visually-hidden" onChange={() => this.handleChange()} type="radio" name="answer" value="artist-2" id="answer-2" />
               <label className="artist__name" htmlFor="answer-2">
                 <img className="artist__picture" src="http://placehold.it/134x134" alt="Пелагея" />
                 Краснознаменная дивизия имени моей бабушки
@@ -38,10 +38,10 @@ class GameArtist extends React.Component {
             </div>
 
             <div className="artist">
-              <input className="artist__input visually-hidden" onChange={this.handleChange} type="radio" name="answer" value="artist-3" id="answer-3" />
+              <input className="artist__input visually-hidden" onChange={() => this.handleChange()} type="radio" name="answer" value="artist-3" id="answer-3" />
               <label className="artist__name" htmlFor="answer-3">
                 <img className="artist__picture" src="http://placehold.it/134x134" alt="Пелагея" />
-              Lorde
+                Lorde
               </label>
             </div>
           </form>

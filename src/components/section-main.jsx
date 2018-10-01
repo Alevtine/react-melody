@@ -2,13 +2,15 @@ import React from 'react';
 
 import Header from './header.jsx';
 import Welcome from './welcome.jsx';
-import Screen from './screen.jsx';
+import GameScreen from './game-screen.jsx';
 import ResultFail from './result-fail.jsx';
+import ResultSuccess from './result-success.jsx';
 
 
 class SectionMain extends React.Component {
   state = {
-    actualScreen: 'Welcome'
+    actualScreen: 'Welcome',
+    questions: []
   }
 
   componentDidMount() {
@@ -21,18 +23,20 @@ class SectionMain extends React.Component {
     })
   }
 
+
   render() {
     let actualScreen;
     if (this.state.actualScreen === 'Welcome') {
-      actualScreen = <Welcome nextScreen={this.nextScreen('Screen')} />;
-    } else if (this.state.actualScreen === 'Screen') {
-      actualScreen = <Screen nextScreen={this.nextScreen('ResultFail')} />;
+      actualScreen = <Welcome nextScreen={this.nextScreen.bind(this, 'GameScreen')} />;
+    } else if (this.state.actualScreen === 'GameScreen') {
+      actualScreen = <GameScreen nextScreen={this.nextScreen.bind(this, 'ResultSuccess')} />;
+    } else if (this.state.actualScreen === 'ResultSuccess') {
+      actualScreen = <ResultFail nextScreen={this.nextScreen.bind(this, 'ResultFail')} />;
     }
 
     return (
       <section>
-        <Screen />
-        {/* {actualScreen} */}
+        {actualScreen}
       </section>
     )
   }

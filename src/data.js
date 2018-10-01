@@ -1,5 +1,5 @@
 
-export default const gameData = [
+export default gameData = [
   {
     type: 'artist',
     question: 'Кто исполняет эту песню?',

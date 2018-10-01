@@ -60,7 +60,7 @@ class GameGenre extends React.Component {
               </div>
             </div>
 
-            <button className="game__submit button" onClick={this.handleClick} type="submit">Ответить</button>
+            <button className="game__submit button" onClick={() => this.handleClick()} type="submit">Ответить</button>
           </form>
         </section>
       </section>

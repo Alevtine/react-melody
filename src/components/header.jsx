@@ -1,7 +1,10 @@
 import React from 'react';
+import Lives from './lives.jsx';
 
 class Header extends React.Component {
+
   render() {
+    const { lives, livesTotal } = this.props;
     return (
       <header className="game__header">
         <a className="game__back" href="#">
@@ -20,11 +23,8 @@ class Header extends React.Component {
           <span className="timer__secs">00</span>
         </div>
 
-        <div className="game__mistakes">
-          <div className="wrong" />
-          <div className="wrong" />
-          <div className="wrong" />
-        </div>
+        <Lives lives={lives} livesTotal={livesTotal} />
+
       </header>
     );
   }
