@@ -21,12 +21,12 @@ class Header extends React.Component {
         </div>
 
         <div className="game__mistakes">
-          <div className="wrong"></div>
-          <div className="wrong"></div>
-          <div className="wrong"></div>
+          <div className="wrong" />
+          <div className="wrong" />
+          <div className="wrong" />
         </div>
       </header>
-    )
+    );
   }
 }
 

@@ -1,20 +1,18 @@
 import React from 'react';
-import Welcome from './components/welcome';
-import Footer from './components/footer';
+
+import Footer from './components/footer.jsx';
+import SectionMain from './components/section-main.jsx';
 
 
-  class App extends React.Component {
-    state = {
-      isNext: false
-    }
-    render() {
-      return (
-        <section>
-          <Welcome />
-          <Footer />
-        </section>
-      )
-    }
+class App extends React.Component {
+  render() {
+    return (
+      <section>
+        <SectionMain />
+        <Footer />
+      </section>
+    );
+  }
 }
 
-  export default App;
+export default App;

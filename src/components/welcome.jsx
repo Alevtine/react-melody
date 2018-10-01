@@ -1,32 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Screen from './screen';
+import Screen from './screen.jsx';
 
 class Welcome extends React.Component {
-  constructor(props) {
-      super(props);
-      this.handleClick = this.handleClick.bind(this);
-    }
 
-    render() {
-      return (
+  handleClick() {
+    ReactDOM.render(<Screen />, document.getElementById('root'));
+  }
+
+  render() {
+    return (
       <section className="welcome">
         <div className="welcome__logo"><img src="img/melody-logo-ginger.png" alt="Угадай мелодию" width="186" height="83" /></div>
         <button className="welcome__button" onClick={this.handleClick}><span className="visually-hidden">Начать игру</span></button>
         <h2 className="welcome__rules-title">Правила игры</h2>
         <p className="welcome__text">Правила просты:</p>
         <ul className="welcome__rules-list">
-          <li>За 5 минут нужно ответить на все вопросы.</li>
+          <li>За 5 минут нужно ответить на все вопросы.</li>
           <li>Можно допустить 3 ошибки.</li>
         </ul>
         <p className="welcome__text">Удачи!</p>
       </section>
-  );
+    );
   }
-
-    handleClick() {
-      ReactDOM.render(<Screen />, document.getElementById('root'))
-    }
 }
 
 export default Welcome;

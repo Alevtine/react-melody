@@ -9,6 +9,8 @@ class ResultFail extends React.Component {
         <p className="result__total result__total--fail">Время вышло! Вы не успели отгадать все мелодии</p>
         <button className="result__replay" type="button">Попробовать ещё раз</button>
       </section>
-    )
+    );
   }
 }
+
+export default ResultFail;
