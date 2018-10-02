@@ -12,7 +12,7 @@ const Question = (props) => {
     <section>
       {getRandom(gameType)}
     </section>
-  )
-}
+  );
+};
 
 export default Question;

@@ -23,7 +23,7 @@ class SectionMain extends React.Component {
     })
   }
 
-  startPlay() {
+  startPlay = () => {
     this.setState({
       actualScreen: 'Welcome'
     })
@@ -40,9 +40,24 @@ class SectionMain extends React.Component {
       'ResultFail': <ResultFail nextScreen={this.nextScreen.bind(this, 'GameScreen')} />
     }
 
+    let actualScreen;
+    switch(this.state.actualScreen) {
+      case 'Welcome':
+      actualScreen = screenKind['Welcome'];
+      break;
+      case 'GameScreen':
+      if (this.props.lives >= 1) {
+        actualScreen = screenKind['GameScreen'];
+      } else {
+        actualScreen = screenKind['ResultFail'];
+      }
+      break;
+      default: actualScreen = <div>Error</div>;
+    }
+
     return (
       <section>
-        {screenKind[this.state.actualScreen]}
+        {actualScreen}
       </section>
     )
   }
