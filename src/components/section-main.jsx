@@ -23,20 +23,26 @@ class SectionMain extends React.Component {
     })
   }
 
+  startPlay() {
+    this.setState({
+      actualScreen: 'Welcome'
+    })
+  }
+
 
   render() {
-    let actualScreen;
-    if (this.state.actualScreen === 'Welcome') {
-      actualScreen = <Welcome nextScreen={this.nextScreen.bind(this, 'GameScreen')} />;
-    } else if (this.state.actualScreen === 'GameScreen') {
-      actualScreen = <GameScreen nextScreen={this.nextScreen.bind(this, 'ResultSuccess')} />;
-    } else if (this.state.actualScreen === 'ResultSuccess') {
-      actualScreen = <ResultFail nextScreen={this.nextScreen.bind(this, 'ResultFail')} />;
+    const { lives, levelsTotal, livesTotal } = this.props;
+
+    const screenKind = {
+      'Welcome': <Welcome nextScreen={this.nextScreen.bind(this, 'GameScreen')} />,
+      'GameScreen': <GameScreen lives={this.props.lives} levelsTotal={this.props.levelsTotal} livesTotal={this.props.livesTotal} nextScreen={this.nextScreen.bind(this, 'GameScreen')} startPlay={this.startPlay} />,
+      'ResultSuccess': <ResultSuccess nextScreen={this.nextScreen.bind(this, 'GameScreen')} />,
+      'ResultFail': <ResultFail nextScreen={this.nextScreen.bind(this, 'GameScreen')} />
     }
 
     return (
       <section>
-        {actualScreen}
+        {screenKind[this.state.actualScreen]}
       </section>
     )
   }

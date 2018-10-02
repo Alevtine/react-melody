@@ -22,12 +22,13 @@ class GameScreen extends React.Component {
     nextProps.lives > 1 ? this.nextLevel() : false;
   }
 
+
   render() {
 
     return (
       <section>
-        <Header lives={this.state.lives} livesTotal={this.props.livesTotal} />
-        <Question nextLevel={this.nextLevel} currentLevel={this.state.level}/>
+        <Header lives={this.state.lives} livesTotal={this.props.livesTotal} startPlay={this.props.startPlay} />
+        <Question nextLevel={this.nextLevel} currentLevel={this.state.level} />
       </section>
     )
   }
