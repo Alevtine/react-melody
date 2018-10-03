@@ -15,11 +15,9 @@ class GameScreen extends React.Component {
       this.setState({
         level: this.state.level + 1
       })
+    } else {
+      this.props.showResult();
     }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    nextProps.lives > 1 ? this.nextLevel() : false;
   }
 
 

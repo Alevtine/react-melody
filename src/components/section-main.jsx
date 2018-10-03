@@ -5,17 +5,24 @@ import Welcome from './welcome.jsx';
 import GameScreen from './game-screen.jsx';
 import ResultFail from './result-fail.jsx';
 import ResultSuccess from './result-success.jsx';
+import Error from './error.jsx';
 
 
 class SectionMain extends React.Component {
   state = {
     actualScreen: 'Welcome',
-    questions: []
+    questions: [],
+    answers: []
   }
 
   componentDidMount() {
     //загрузка треков с вопросами
   }
+
+  // componentWillReceiveProps(nextProps) {
+
+  // }
+
 
   nextScreen = screen => {
     this.setState({
@@ -29,30 +36,60 @@ class SectionMain extends React.Component {
     })
   }
 
+  isAlive() {
+    return this.props.lives > 0;
+  }
+
+  isLast() {
+    return this.props.level === this.props.levelsTotal;
+  }
+
+  showResult = () => {
+      if (this.isAlive() && this.isLast()) {
+      this.setState({
+        actualScreen: 'ResultSuccess'
+      })
+    } else {
+      this.setState({
+        actualScreen: 'ResultFail'
+      })
+    }
+  }
+
 
   render() {
-    const { lives, levelsTotal, livesTotal } = this.props;
+    const { lives, level, levelsTotal, livesTotal } = this.props;
 
     const screenKind = {
       'Welcome': <Welcome nextScreen={this.nextScreen.bind(this, 'GameScreen')} />,
-      'GameScreen': <GameScreen lives={this.props.lives} levelsTotal={this.props.levelsTotal} livesTotal={this.props.livesTotal} nextScreen={this.nextScreen.bind(this, 'GameScreen')} startPlay={this.startPlay} />,
+      'GameScreen': <GameScreen
+        lives={this.props.lives}
+        level={this.props.level}
+        levelsTotal={this.props.levelsTotal}
+        livesTotal={this.props.livesTotal}
+        nextScreen={this.nextScreen.bind(this, 'GameScreen')}
+        startPlay={this.startPlay}
+        showResult={this.showResult}
+        isAlive={this.isAlive}
+        isLast={this.isLast} />,
       'ResultSuccess': <ResultSuccess nextScreen={this.nextScreen.bind(this, 'GameScreen')} />,
       'ResultFail': <ResultFail nextScreen={this.nextScreen.bind(this, 'GameScreen')} />
     }
 
     let actualScreen;
+
     switch(this.state.actualScreen) {
       case 'Welcome':
       actualScreen = screenKind['Welcome'];
       break;
       case 'GameScreen':
-      if (this.props.lives >= 1) {
+      if (this.isAlive() && !this.isLast()) {
         actualScreen = screenKind['GameScreen'];
       } else {
-        actualScreen = screenKind['ResultFail'];
+        this.showResult();
       }
       break;
-      default: actualScreen = <div>Error</div>;
+      default: actualScreen = <Error />;
     }
 
     return (
