@@ -10,11 +10,13 @@ class GameScreen extends React.Component {
     }
 
   nextLevel = () => {
-      if (this.state.level < 10) {
+      if (this.state.level < this.props.levelsTotal) {
       this.props.nextScreen();
       this.setState({
         level: this.state.level + 1
       })
+      let data = this.state;
+      this.props.updateState(data);
     } else {
       this.props.showResult();
     }

@@ -12,16 +12,21 @@ class SectionMain extends React.Component {
   state = {
     actualScreen: 'Welcome',
     questions: [],
-    answers: []
+    answers: [],
+    level: 1,
+    lives: 3
   }
 
   componentDidMount() {
     //загрузка треков с вопросами
   }
 
-  // componentWillReceiveProps(nextProps) {
-
-  // }
+  updateState = data => {
+    this.setState({
+      lives: data.lives,
+      level: data.level + 1
+    })
+  }
 
 
   nextScreen = screen => {
@@ -37,25 +42,12 @@ class SectionMain extends React.Component {
   }
 
   isAlive() {
-    return this.props.lives > 0;
+    return this.state.lives > 0;
   }
 
   isLast() {
-    return this.props.level === this.props.levelsTotal;
+    return this.state.level === this.props.levelsTotal;
   }
-
-  showResult = () => {
-      if (this.isAlive() && this.isLast()) {
-      this.setState({
-        actualScreen: 'ResultSuccess'
-      })
-    } else {
-      this.setState({
-        actualScreen: 'ResultFail'
-      })
-    }
-  }
-
 
   render() {
     const { lives, level, levelsTotal, livesTotal } = this.props;
@@ -63,15 +55,14 @@ class SectionMain extends React.Component {
     const screenKind = {
       'Welcome': <Welcome nextScreen={this.nextScreen.bind(this, 'GameScreen')} />,
       'GameScreen': <GameScreen
-        lives={this.props.lives}
-        level={this.props.level}
         levelsTotal={this.props.levelsTotal}
         livesTotal={this.props.livesTotal}
         nextScreen={this.nextScreen.bind(this, 'GameScreen')}
         startPlay={this.startPlay}
         showResult={this.showResult}
         isAlive={this.isAlive}
-        isLast={this.isLast} />,
+        isLast={this.isLast}
+        updateState={this.updateState.bind(this)} />,
       'ResultSuccess': <ResultSuccess nextScreen={this.nextScreen.bind(this, 'GameScreen')} />,
       'ResultFail': <ResultFail nextScreen={this.nextScreen.bind(this, 'GameScreen')} />
     }
@@ -85,8 +76,10 @@ class SectionMain extends React.Component {
       case 'GameScreen':
       if (this.isAlive() && !this.isLast()) {
         actualScreen = screenKind['GameScreen'];
+      } else if (this.isAlive() && this.isLast()) {
+        actualScreen = screenKind['ResultSuccess'];
       } else {
-        this.showResult();
+        actualScreen = screenKind['ResultFail'];
       }
       break;
       default: actualScreen = <Error />;
