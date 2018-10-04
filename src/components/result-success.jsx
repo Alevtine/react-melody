@@ -9,7 +9,7 @@ class ResultSuccess extends React.Component {
         <h2 className="result__title">Вы настоящий меломан!</h2>
         <p className="result__total">За 3 минуты и 25 секунд вы набрали 12 баллов (8 быстрых), совершив 3 ошибки</p>
         <p className="result__text">Вы заняли 2 место из 10. Это лучше чем у 80% игроков</p>
-        <ReplayButton nextScreen={this.props.nextScreen} />
+        <ReplayButton startPlay={this.props.startPlay} />
       </section>
     );
   }

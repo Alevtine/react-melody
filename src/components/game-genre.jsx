@@ -7,7 +7,7 @@ class GameGenre extends React.Component {
 
   handleClick() {
     const { currentLevel, nextLevel } = this.props;
-    nextLevel();
+    this.props.nextLevel();
   }
 
   render() {

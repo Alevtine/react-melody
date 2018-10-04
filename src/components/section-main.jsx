@@ -6,28 +6,46 @@ import GameScreen from './game-screen.jsx';
 import ResultFail from './result-fail.jsx';
 import ResultSuccess from './result-success.jsx';
 import Error from './error.jsx';
+import gameData from '../data.js';
 
 
 class SectionMain extends React.Component {
   state = {
     actualScreen: 'Welcome',
-    questions: [],
-    answers: [],
+    questions: gameData,
+    answers: 0,
     level: 1,
     lives: 3
+  }
+
+  beginState = {
+    livesTotal: 3
   }
 
   componentDidMount() {
     //загрузка треков с вопросами
   }
 
-  updateState = data => {
+  calculateScore(x) {
     this.setState({
-      lives: data.lives,
-      level: data.level + 1
+      answers: this.state.answers + x
     })
   }
 
+  takeLife() {
+    this.setState({
+      lives: this.state.lives -1
+    })
+  }
+
+  nextLevel = () => {
+      if (!this.isLast()) {
+      this.nextScreen('GameScreen');
+      this.setState({
+        level: this.state.level + 1
+      })
+    }
+  }
 
   nextScreen = screen => {
     this.setState({
@@ -37,7 +55,9 @@ class SectionMain extends React.Component {
 
   startPlay = () => {
     this.setState({
-      actualScreen: 'Welcome'
+      actualScreen: 'Welcome',
+      level: 1,
+      lives: 3
     })
   }
 
@@ -46,7 +66,7 @@ class SectionMain extends React.Component {
   }
 
   isLast() {
-    return this.state.level === this.props.levelsTotal;
+    return this.state.level === this.state.questions.length;
   }
 
   render() {
@@ -55,16 +75,21 @@ class SectionMain extends React.Component {
     const screenKind = {
       'Welcome': <Welcome nextScreen={this.nextScreen.bind(this, 'GameScreen')} />,
       'GameScreen': <GameScreen
-        levelsTotal={this.props.levelsTotal}
-        livesTotal={this.props.livesTotal}
+        level={this.state.level}
+        lives={this.state.lives}
+        levelsTotal={this.state.questions.length}
+        livesTotal={this.beginState.livesTotal}
         nextScreen={this.nextScreen.bind(this, 'GameScreen')}
         startPlay={this.startPlay}
-        showResult={this.showResult}
         isAlive={this.isAlive}
         isLast={this.isLast}
-        updateState={this.updateState.bind(this)} />,
-      'ResultSuccess': <ResultSuccess nextScreen={this.nextScreen.bind(this, 'GameScreen')} />,
-      'ResultFail': <ResultFail nextScreen={this.nextScreen.bind(this, 'GameScreen')} />
+        nextLevel={this.nextLevel.bind(this)}
+        questionsData={this.state.questions}
+        answers={this.state.answers}
+        calculateScore={this.calculateScore.bind(this)}
+        takeLife={this.takeLife.bind(this)} />,
+      'ResultSuccess': <ResultSuccess startPlay={this.startPlay} />,
+      'ResultFail': <ResultFail startPlay={this.startPlay} />
     }
 
     let actualScreen;

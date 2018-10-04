@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom';
 import GameScreen from './game-screen.jsx';
 
 class Welcome extends React.Component {
-  state = {
-    actualScreen: 'Welcome'
-  }
 
   handleClick = () => {
     this.props.nextScreen()

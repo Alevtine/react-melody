@@ -5,12 +5,14 @@ import GameArtist from './game-artist.jsx';
 
 
 const Question = (props) => {
-  const gameType = [<GameGenre key={props.currentLevel} {...props} />, <GameArtist key={props.currentLevel} {...props} />];
-  const getRandom = arr => arr[Math.floor(Math.random() * arr.length)];
+  const questionType = {
+    artist: <GameArtist key={props.currentLevel} {...props} />,
+    genre: <GameGenre key={props.currentLevel} {...props} />,
+  };
 
   return (
     <section>
-      {getRandom(gameType)}
+      {questionType[props.currentQuestion.type]}
     </section>
   );
 };
