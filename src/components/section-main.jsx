@@ -26,32 +26,32 @@ class SectionMain extends React.Component {
     //загрузка треков с вопросами
   }
 
-  calculateScore(x) {
-    this.setState({
-      answers: this.state.answers + x
-    })
+  calculateScore = (x) => {
+    this.setState(prevState => ({
+      answers: prevState.answers + x,
+    }))
   }
 
-  takeLife() {
-    this.setState({
-      lives: this.state.lives -1
-    })
+  takeLife = () => {
+    this.setState(prevState => ({
+      lives: prevState.lives - 1,
+    }))
   }
 
   nextLevel = () => {
       if (!this.isLast()) {
       this.nextScreen('GameScreen');
-      this.setState({
-        level: this.state.level + 1
-      })
+      this.setState(prevState => ({
+        level: prevState.level + 1,
+      }))
     }
   }
 
-  nextScreen = screen => {
+  nextScreen = screen => () => { // функция высшего порядка
     this.setState({
-      actualScreen: screen
+      actualScreen: screen,
     })
-  }
+  };
 
   startPlay = () => {
     this.setState({
@@ -62,33 +62,33 @@ class SectionMain extends React.Component {
     })
   }
 
-  isAlive() {
+  isAlive = () => {
     return this.state.lives > 0;
   }
 
-  isLast() {
+  isLast = () => {
     return this.state.level === this.state.questions.length;
   }
 
   render() {
-    const { lives, level, levelsTotal, livesTotal } = this.props;
+    const { questions } = this.state;
 
     const screenKind = {
-      'Welcome': <Welcome nextScreen={this.nextScreen.bind(this, 'GameScreen')} />,
+      'Welcome': <Welcome nextScreen={this.nextScreen('GameScreen')} />,
       'GameScreen': <GameScreen
         level={this.state.level}
         lives={this.state.lives}
-        levelsTotal={this.state.questions.length}
+        levelsTotal={questions.length}
         livesTotal={this.beginState.livesTotal}
-        nextScreen={this.nextScreen.bind(this, 'GameScreen')}
+        nextScreen={this.nextScreen('GameScreen')}
         startPlay={this.startPlay}
         isAlive={this.isAlive}
         isLast={this.isLast}
-        nextLevel={this.nextLevel.bind(this)}
-        questionsData={this.state.questions}
+        nextLevel={this.nextLevel}
+        questionsData={questions}
         answers={this.state.answers}
-        calculateScore={this.calculateScore.bind(this)}
-        takeLife={this.takeLife.bind(this)} />,
+        calculateScore={this.calculateScore}
+        takeLife={this.takeLife} />,
       'ResultSuccess': <ResultSuccess startPlay={this.startPlay} />,
       'ResultFail': <ResultFail startPlay={this.startPlay} />
     }
@@ -97,18 +97,19 @@ class SectionMain extends React.Component {
 
     switch(this.state.actualScreen) {
       case 'Welcome':
-      actualScreen = screenKind['Welcome'];
+        actualScreen = screenKind['Welcome'];
       break;
       case 'GameScreen':
-      if (this.isAlive() && !this.isLast()) {
-        actualScreen = screenKind['GameScreen'];
-      } else if (this.isAlive() && this.isLast()) {
-        actualScreen = screenKind['ResultSuccess'];
-      } else {
-        actualScreen = screenKind['ResultFail'];
-      }
+        if (this.isAlive() && !this.isLast()) {
+          actualScreen = screenKind['GameScreen'];
+        } else if (this.isAlive() && this.isLast()) {
+          actualScreen = screenKind['ResultSuccess'];
+        } else {
+          actualScreen = screenKind['ResultFail'];
+        }
       break;
-      default: actualScreen = <Error />;
+      default:
+        actualScreen = <Error />;
     }
 
     return (
