@@ -2,9 +2,6 @@ import React from 'react';
 
 
 class GameArtist extends React.Component {
-  componentDidMount() {
-    // старт таймера
-  }
 
   handleChange(event) {
     const { currentLevel, nextLevel, answers } = this.props;
@@ -20,7 +17,7 @@ class GameArtist extends React.Component {
       this.props.takeLife();
     }
 
-    nextLevel();
+    this.props.nextLevel();
   }
 
 
@@ -49,7 +46,9 @@ class GameArtist extends React.Component {
           <h2 className="game__title">{title}</h2>
           <div className="game__track">
             <button className="track__button track__button--play" type="button" />
-            <audio />
+            <audio>
+              <source preload="auto" src={this.props.currentQuestion.src} type="audio/mpeg" autoPlay />
+            </audio>
           </div>
           <form className="game__artist">
             {renderedAnswers}

@@ -56,6 +56,7 @@ class SectionMain extends React.Component {
   startPlay = () => {
     this.setState({
       actualScreen: 'Welcome',
+      answers: 0,
       level: 1,
       lives: 3
     })
