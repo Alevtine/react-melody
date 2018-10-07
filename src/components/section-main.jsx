@@ -5,7 +5,7 @@ import Welcome from './welcome.jsx';
 import GameScreen from './game-screen.jsx';
 import ResultFail from './result-fail.jsx';
 import ResultSuccess from './result-success.jsx';
-import Error from './error.jsx';
+import ErrorBlock from './error.jsx';
 import gameData from '../data.js';
 
 
@@ -13,7 +13,7 @@ class SectionMain extends React.Component {
   state = {
     actualScreen: 'Welcome',
     questions: gameData,
-    answers: 0,
+    scores: 0,
     level: 1,
     lives: 3
   }
@@ -22,13 +22,20 @@ class SectionMain extends React.Component {
     livesTotal: 3
   }
 
-  componentDidMount() {
-    //загрузка треков с вопросами
-  }
+  // componentDidMount() {
+  //   const url = 'https://es.dump.academy/guess-melody/questions';
+  //   fetch(url, { method: 'GET' })
+  //   .then(response => response.json())
+  //   .then((data) => {
+  //     this.setState({
+  //       questions: data
+  //     })
+  //   })
+  // }
 
   calculateScore(x) {
     this.setState({
-      answers: this.state.answers + x
+      scores: this.state.scores + x
     })
   }
 
@@ -47,6 +54,40 @@ class SectionMain extends React.Component {
     }
   }
 
+
+  saveResult = () => {
+    const gameScores = this.state.scores;
+    const url = 'https://es.dump.academy/guess-melody/stats/468133';
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({ scores: gameScores })
+    })
+  }
+
+
+    loadStats () {
+      const url = 'https://es.dump.academy/guess-melody/stats/468133';
+      const data = fetch(url, {
+        method: 'GET'
+      })
+      .then(response => response.json())
+      .then(data => this.ratePlayer(data))
+    }
+
+    ratePlayer (data) {
+      const allPlayersPoints = data.map(item => item.scores);
+      allPlayersPoints.push(this.state.scores)
+      const ratedResults = allPlayersPoints.sort((a,b) => b - a);
+      const playerPlace = ratedResults.findIndex(item => item === this.state.scores) + 1;
+      const rating = 100 - playerPlace * 100 / ratedResults.length;
+      const dataToRender = { playerPlace, rating, playerPoints: this.state.scores };
+
+      return dataToRender;
+    }
+
   nextScreen = screen => {
     this.setState({
       actualScreen: screen
@@ -56,7 +97,7 @@ class SectionMain extends React.Component {
   startPlay = () => {
     this.setState({
       actualScreen: 'Welcome',
-      answers: 0,
+      scores: 0,
       level: 1,
       lives: 3
     })
@@ -67,7 +108,7 @@ class SectionMain extends React.Component {
   }
 
   isLast() {
-    return this.state.level === this.state.questions.length;
+    return this.state.level === this.state.questions.length + 1;
   }
 
   render() {
@@ -86,30 +127,36 @@ class SectionMain extends React.Component {
         isLast={this.isLast}
         nextLevel={this.nextLevel.bind(this)}
         questionsData={this.state.questions}
-        answers={this.state.answers}
+        scores={this.state.scores}
         calculateScore={this.calculateScore.bind(this)}
         takeLife={this.takeLife.bind(this)} />,
-      'ResultSuccess': <ResultSuccess startPlay={this.startPlay} />,
-      'ResultFail': <ResultFail startPlay={this.startPlay} />
+      'ResultSuccess': <ResultSuccess startPlay={this.startPlay} stats={this.props.dataToRender} lives={this.state.lives} />,
+      'ResultFail': <ResultFail startPlay={this.startPlay} />,
+      'ErrorBlock': <ErrorBlock />
     }
 
-    let actualScreen;
+        let actualScreen;
 
-    switch(this.state.actualScreen) {
-      case 'Welcome':
-      actualScreen = screenKind['Welcome'];
-      break;
-      case 'GameScreen':
-      if (this.isAlive() && !this.isLast()) {
-        actualScreen = screenKind['GameScreen'];
-      } else if (this.isAlive() && this.isLast()) {
-        actualScreen = screenKind['ResultSuccess'];
-      } else {
-        actualScreen = screenKind['ResultFail'];
-      }
-      break;
-      default: actualScreen = <Error />;
-    }
+        switch(this.state.actualScreen) {
+          case 'Welcome':
+          actualScreen = screenKind['Welcome'];
+          break;
+          case 'GameScreen':
+          if (this.isAlive() && !this.isLast()) {
+            actualScreen = screenKind['GameScreen'];
+          } else if (this.isAlive() && this.isLast()) {
+            this.saveResult();
+            this.loadStats();
+            actualScreen = screenKind['ResultSuccess'];
+          } else {
+            actualScreen = screenKind['ResultFail'];
+          }
+          break;
+          case 'ErrorBlock':
+          actualScreen = screenKind['ErrorBlock'];
+          break;
+          default: actualScreen = screenKind['ErrorBlock'];
+        }
 
     return (
       <section>
