@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Header from './header.jsx';
+import Footer from './footer.jsx';
 import Welcome from './welcome.jsx';
 import GameScreen from './game-screen.jsx';
 import ResultFail from './result-fail.jsx';
@@ -15,20 +15,37 @@ class SectionMain extends React.Component {
     questions: gameData,
     scores: 0,
     level: 1,
-    lives: 3
+    lives: 3,
+    time: 300,
+    ratingData: null,
+    errorInfo: null
   }
 
   beginState = {
-    livesTotal: 3
+    livesTotal: 3,
+  }
+
+  checkStatus = (response) => {
+    if (response.status === 200) {
+      return response;
+    }
+      throw new Error(response.status)
   }
 
   // componentDidMount() {
   //   const url = 'https://es.dump.academy/guess-melody/questions';
   //   fetch(url, { method: 'GET' })
+  //   .then(this.checkStatus)
   //   .then(response => response.json())
   //   .then((data) => {
   //     this.setState({
   //       questions: data
+  //     })
+  //   })
+  //   .catch((err) => {
+  //     this.setState({
+  //       actualScreen: 'ErrorBlock',
+  //       errorInfo: err.message
   //     })
   //   })
   // }
@@ -41,7 +58,7 @@ class SectionMain extends React.Component {
 
   takeLife() {
     this.setState({
-      lives: this.state.lives -1
+      lives: this.state.lives - 1
     })
   }
 
@@ -57,8 +74,8 @@ class SectionMain extends React.Component {
 
   saveResult = () => {
     const gameScores = this.state.scores;
-    const url = 'https://es.dump.academy/guess-melody/stats/468133';
-    fetch(url, {
+    const url = 'https://es.dump.academy/guess-melody/stats/468135';
+    return fetch(url, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -69,12 +86,19 @@ class SectionMain extends React.Component {
 
 
     loadStats () {
-      const url = 'https://es.dump.academy/guess-melody/stats/468133';
-      const data = fetch(url, {
+      const url = 'https://es.dump.academy/guess-melody/stats/468135';
+      fetch(url, {
         method: 'GET'
       })
+      .then(this.checkStatus)
       .then(response => response.json())
       .then(data => this.ratePlayer(data))
+      .catch((err) => {
+        this.setState({
+          actualScreen: 'ErrorBlock',
+          errorInfo: err.message
+        })
+      })
     }
 
     ratePlayer (data) {
@@ -82,10 +106,12 @@ class SectionMain extends React.Component {
       allPlayersPoints.push(this.state.scores)
       const ratedResults = allPlayersPoints.sort((a,b) => b - a);
       const playerPlace = ratedResults.findIndex(item => item === this.state.scores) + 1;
-      const rating = 100 - playerPlace * 100 / ratedResults.length;
-      const dataToRender = { playerPlace, rating, playerPoints: this.state.scores };
-
-      return dataToRender;
+      const rating = Math.floor(100 - playerPlace * 100 / ratedResults.length);
+      const dataToRender = { playerPlace: playerPlace, rating: rating,  playersQtty: ratedResults.length };
+      this.setState({
+        actualScreen: 'StatScreen',
+        ratingData: dataToRender
+      })
     }
 
   nextScreen = screen => {
@@ -99,8 +125,27 @@ class SectionMain extends React.Component {
       actualScreen: 'Welcome',
       scores: 0,
       level: 1,
-      lives: 3
+      lives: 3,
+      time: 300
     })
+    this.stopTimer()
+  }
+
+  totalTimeTick = () => {
+    this.setState({
+      time: this.state.time - 1
+    });
+    if (this.isTimeOut()) {
+      clearInterval(this.interval);
+    }
+  }
+
+  startTimer = () => {
+    this.interval = setInterval(this.totalTimeTick, 1000)
+  }
+
+  stopTimer = () => {
+    clearInterval(this.interval);
   }
 
   isAlive() {
@@ -111,8 +156,11 @@ class SectionMain extends React.Component {
     return this.state.level === this.state.questions.length + 1;
   }
 
+  isTimeOut() {
+    return this.state.time === 0;
+  }
+
   render() {
-    const { lives, level, levelsTotal, livesTotal } = this.props;
 
     const screenKind = {
       'Welcome': <Welcome nextScreen={this.nextScreen.bind(this, 'GameScreen')} />,
@@ -129,10 +177,19 @@ class SectionMain extends React.Component {
         questionsData={this.state.questions}
         scores={this.state.scores}
         calculateScore={this.calculateScore.bind(this)}
-        takeLife={this.takeLife.bind(this)} />,
-      'ResultSuccess': <ResultSuccess startPlay={this.startPlay} stats={this.props.dataToRender} lives={this.state.lives} />,
-      'ResultFail': <ResultFail startPlay={this.startPlay} />,
-      'ErrorBlock': <ErrorBlock />
+        takeLife={this.takeLife.bind(this)}
+        time={this.state.time}
+        startTimer={this.startTimer}
+        stopTimer={this.stopTimer} />,
+      'ResultSuccess': <ResultSuccess
+        startPlay={this.startPlay}
+        stats={this.state.ratingData}
+        lives={this.state.lives}
+        playerScore={this.state.scores}
+        livesTotal={this.beginState.livesTotal}
+        time={this.state.time} />,
+      'ResultFail': <ResultFail startPlay={this.startPlay} time={this.state.time} lives={this.state.lives} />,
+      'ErrorBlock': <ErrorBlock errorInfo={this.state.errorInfo} />
     }
 
         let actualScreen;
@@ -147,10 +204,12 @@ class SectionMain extends React.Component {
           } else if (this.isAlive() && this.isLast()) {
             this.saveResult();
             this.loadStats();
-            actualScreen = screenKind['ResultSuccess'];
           } else {
             actualScreen = screenKind['ResultFail'];
           }
+          break;
+          case 'StatScreen':
+          actualScreen = screenKind['ResultSuccess'];
           break;
           case 'ErrorBlock':
           actualScreen = screenKind['ErrorBlock'];
@@ -161,6 +220,7 @@ class SectionMain extends React.Component {
     return (
       <section>
         {actualScreen}
+        <Footer />
       </section>
     )
   }

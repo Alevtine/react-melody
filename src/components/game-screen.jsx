@@ -4,13 +4,25 @@ import Header from './header.jsx';
 
 
 class GameScreen extends React.Component {
+  componentDidMount = () => {
+    if (this.props.level === 1) {
+      this.props.startTimer()
+    }
+  }
+
+  componentWillUnmount = () => {
+    this.props.stopTimer();
+  }
+
   render() {
-    
     const currentQuestion = this.props.questionsData[this.props.level - 1];
 
     return (
       <section>
-        <Header lives={this.props.lives} livesTotal={this.props.livesTotal} startPlay={this.props.startPlay} />
+        <Header lives={this.props.lives}
+          livesTotal={this.props.livesTotal}
+          startPlay={this.props.startPlay}
+          time={this.props.time} />
         <Question
           currentQuestion={currentQuestion}
           nextLevel={this.props.nextLevel}
@@ -18,7 +30,8 @@ class GameScreen extends React.Component {
           scores={this.props.scores}
           lives={this.props.lives}
           calculateScore={this.props.calculateScore}
-          takeLife={this.props.takeLife} />
+          takeLife={this.props.takeLife}
+        />
       </section>
     );
   }

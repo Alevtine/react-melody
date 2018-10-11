@@ -113,40 +113,40 @@ export default [
       },
     ],
   },
-  {
-    type: 'artist',
-    question: 'Кто исполняет эту песню?',
-    src: 'https://freemusicarchive.org/music/listen/fef7bc36c8953c80e7f8561b873ebe5f35d27fa7',
-    answers: [
-      {
-        image: {
-          url: 'https://freemusicarchive.org/file/images/artists/Paper_Navy_-_20120226181728099.jpg?width=300&height=300',
-          width: 300,
-          height: 300,
-        },
-        title: 'Paper Navy',
-        isCorrect: false,
-      },
-      {
-        image: {
-          url: 'https://freemusicarchive.org/file/images/artists/Stephan_Siebert_-_20160712113333691.jpg?width=300&height=300',
-          width: 300,
-          height: 300,
-        },
-        title: 'Stephan Siebert',
-        isCorrect: true,
-      },
-      {
-        image: {
-          url: 'https://freemusicarchive.org/file/images/artists/Waylon_Thornton_-_2012061793125465.jpg?width=300&height=300',
-          width: 300,
-          height: 300,
-        },
-        title: 'Waylon Thornton',
-        isCorrect: false,
-      },
-    ],
-  },
+  // {
+  //   type: 'artist',
+  //   question: 'Кто исполняет эту песню?',
+  //   src: 'https://freemusicarchive.org/music/listen/fef7bc36c8953c80e7f8561b873ebe5f35d27fa7',
+  //   answers: [
+  //     {
+  //       image: {
+  //         url: 'https://freemusicarchive.org/file/images/artists/Paper_Navy_-_20120226181728099.jpg?width=300&height=300',
+  //         width: 300,
+  //         height: 300,
+  //       },
+  //       title: 'Paper Navy',
+  //       isCorrect: false,
+  //     },
+  //     {
+  //       image: {
+  //         url: 'https://freemusicarchive.org/file/images/artists/Stephan_Siebert_-_20160712113333691.jpg?width=300&height=300',
+  //         width: 300,
+  //         height: 300,
+  //       },
+  //       title: 'Stephan Siebert',
+  //       isCorrect: true,
+  //     },
+  //     {
+  //       image: {
+  //         url: 'https://freemusicarchive.org/file/images/artists/Waylon_Thornton_-_2012061793125465.jpg?width=300&height=300',
+  //         width: 300,
+  //         height: 300,
+  //       },
+  //       title: 'Waylon Thornton',
+  //       isCorrect: false,
+  //     },
+  //   ],
+  // },
   // {
   //   type: 'genre',
   //   question: 'Выберите все фолковые песни',

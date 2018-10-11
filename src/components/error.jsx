@@ -1,9 +1,9 @@
 import React from 'react';
 
-const ErrorBlock = () => (
+const ErrorBlock = (props) => (
   <section className="modal">
     <h2 className="modal__title">Произошла ошибка!</h2>
-    <p className="modal__text">Статус: 404. Пожалуйста, перезагрузите страницу.</p>
+    <p className="modal__text">Статус: {props.errorInfo}. Пожалуйста, перезагрузите страницу.</p>
   </section>
 );
 

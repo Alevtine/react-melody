@@ -5,7 +5,7 @@ import ResetButton from './reset-button';
 
 class Header extends React.Component {
   render() {
-    const { lives, livesTotal } = this.props;
+    const { lives, livesTotal, time } = this.props;
     return (
       <header className="game__header">
         <ResetButton startPlay={this.props.startPlay} />
@@ -13,7 +13,7 @@ class Header extends React.Component {
           <circle className="timer__line" cx="390" cy="390" r="370"
             style={{filter: 'url(.#blur)', transform: 'rotate(-90deg) scaleY(-1)', transformOrigin: 'center'}}/>
         </svg> */}
-        <Timer />
+        <Timer time={time} />
         <Lives lives={lives} livesTotal={livesTotal} />
 
       </header>

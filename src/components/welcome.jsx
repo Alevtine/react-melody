@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import GameScreen from './game-screen.jsx';
 
 class Welcome extends React.Component {
 
