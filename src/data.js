@@ -22,97 +22,97 @@ export default [
       },
     ],
   },
-  {
-    type: 'genre',
-    question: 'Выберите классику',
-    genre: 'classical',
-    answers: [
-      {
-        src: 'https://freemusicarchive.org/music/listen/d10182663330b3fadb944cbfc49a91b526cbd0a9',
-        genre: 'jazz',
-      },
-      {
-        src: 'https://freemusicarchive.org/music/listen/ba2985df39aae1fdb987ac4532d7a5dfc0c002d0',
-        genre: 'classical',
-      },
-      {
-        src: 'https://freemusicarchive.org/music/listen/b9318f3d59cd32e3e0ad89ce3f5656168cafd444',
-        genre: 'country',
-      },
-      {
-        src: 'https://freemusicarchive.org/music/listen/0c0b75cc14bdbbb264ae7ac7d1cce0f1425c0e5d',
-        genre: 'pop',
-      },
-    ],
-  },
-  {
-    type: 'artist',
-    question: 'Кто исполняет эту песню?',
-    src: 'https://freemusicarchive.org/music/listen/22d02e2f14b69735db8dbb9a3324bf6c61e20228',
-    answers: [
-      {
-        image: {
-          url: 'https://freemusicarchive.org/file/images/artists/Lobo_Loco_-_20160509152923470.jpg?width=300&height=300',
-          width: 300,
-          height: 300,
-        },
-        title: 'Loco Loco',
-        isCorrect: false,
-      },
-      {
-        image: {
-          url: 'https://freemusicarchive.org/file/images/artists/Kevin_MacLeod_-_20110715150335323.png?width=300&height=300',
-          width: 300,
-          height: 300,
-        },
-        title: 'Kevin MacLeod',
-        isCorrect: true,
-      },
-      {
-        image: {
-          url: 'https://freemusicarchive.org/file/images/artists/Quantum_Jazz_-_20120509113401114.jpg?width=300&height=300',
-          width: 300,
-          height: 300,
-        },
-        title: 'Quantum Jazz',
-        isCorrect: false,
-      },
-    ],
-  },
-  {
-    type: 'artist',
-    question: 'Кто исполняет эту песню?',
-    src: 'https://freemusicarchive.org/music/listen/d10182663330b3fadb944cbfc49a91b526cbd0a9',
-    answers: [
-      {
-        image: {
-          url: 'https://freemusicarchive.org/file/images/artists/Quantum_Jazz_-_20120509113401114.jpg?width=300&height=300',
-          width: 300,
-          height: 300,
-        },
-        title: 'Quantum Jazz',
-        isCorrect: true,
-      },
-      {
-        image: {
-          url: 'https://freemusicarchive.org/file/images/artists/Comfort_Fit_-_20091216190305442.jpg?width=300&height=300',
-          width: 300,
-          height: 300,
-        },
-        title: 'Comfort Fit',
-        isCorrect: false,
-      },
-      {
-        image: {
-          url: 'https://freemusicarchive.org/file/images/artists/Jason_Shaw_-_20131120155444083.jpg?width=300&height=300',
-          width: 300,
-          height: 300,
-        },
-        title: 'Jason Shaw',
-        isCorrect: false,
-      },
-    ],
-  },
+  // {
+  //   type: 'genre',
+  //   question: 'Выберите классику',
+  //   genre: 'classical',
+  //   answers: [
+  //     {
+  //       src: 'https://freemusicarchive.org/music/listen/d10182663330b3fadb944cbfc49a91b526cbd0a9',
+  //       genre: 'jazz',
+  //     },
+  //     {
+  //       src: 'https://freemusicarchive.org/music/listen/ba2985df39aae1fdb987ac4532d7a5dfc0c002d0',
+  //       genre: 'classical',
+  //     },
+  //     {
+  //       src: 'https://freemusicarchive.org/music/listen/b9318f3d59cd32e3e0ad89ce3f5656168cafd444',
+  //       genre: 'country',
+  //     },
+  //     {
+  //       src: 'https://freemusicarchive.org/music/listen/0c0b75cc14bdbbb264ae7ac7d1cce0f1425c0e5d',
+  //       genre: 'pop',
+  //     },
+  //   ],
+  // },
+  // {
+  //   type: 'artist',
+  //   question: 'Кто исполняет эту песню?',
+  //   src: 'https://freemusicarchive.org/music/listen/22d02e2f14b69735db8dbb9a3324bf6c61e20228',
+  //   answers: [
+  //     {
+  //       image: {
+  //         url: 'https://freemusicarchive.org/file/images/artists/Lobo_Loco_-_20160509152923470.jpg?width=300&height=300',
+  //         width: 300,
+  //         height: 300,
+  //       },
+  //       title: 'Loco Loco',
+  //       isCorrect: false,
+  //     },
+  //     {
+  //       image: {
+  //         url: 'https://freemusicarchive.org/file/images/artists/Kevin_MacLeod_-_20110715150335323.png?width=300&height=300',
+  //         width: 300,
+  //         height: 300,
+  //       },
+  //       title: 'Kevin MacLeod',
+  //       isCorrect: true,
+  //     },
+  //     {
+  //       image: {
+  //         url: 'https://freemusicarchive.org/file/images/artists/Quantum_Jazz_-_20120509113401114.jpg?width=300&height=300',
+  //         width: 300,
+  //         height: 300,
+  //       },
+  //       title: 'Quantum Jazz',
+  //       isCorrect: false,
+  //     },
+  //   ],
+  // },
+  // {
+  //   type: 'artist',
+  //   question: 'Кто исполняет эту песню?',
+  //   src: 'https://freemusicarchive.org/music/listen/d10182663330b3fadb944cbfc49a91b526cbd0a9',
+  //   answers: [
+  //     {
+  //       image: {
+  //         url: 'https://freemusicarchive.org/file/images/artists/Quantum_Jazz_-_20120509113401114.jpg?width=300&height=300',
+  //         width: 300,
+  //         height: 300,
+  //       },
+  //       title: 'Quantum Jazz',
+  //       isCorrect: true,
+  //     },
+  //     {
+  //       image: {
+  //         url: 'https://freemusicarchive.org/file/images/artists/Comfort_Fit_-_20091216190305442.jpg?width=300&height=300',
+  //         width: 300,
+  //         height: 300,
+  //       },
+  //       title: 'Comfort Fit',
+  //       isCorrect: false,
+  //     },
+  //     {
+  //       image: {
+  //         url: 'https://freemusicarchive.org/file/images/artists/Jason_Shaw_-_20131120155444083.jpg?width=300&height=300',
+  //         width: 300,
+  //         height: 300,
+  //       },
+  //       title: 'Jason Shaw',
+  //       isCorrect: false,
+  //     },
+  //   ],
+  // },
   // {
   //   type: 'artist',
   //   question: 'Кто исполняет эту песню?',

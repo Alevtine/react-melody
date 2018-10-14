@@ -5,22 +5,22 @@ class ResultFail extends React.Component {
   render() {
 
   const failType = {
-    'tries': {
-      'title': 'Какая жалость!',
-      'resultPhraze': 'У вас закончились все попытки. Ничего, повезёт в следующий раз!'
+    tries: {
+      title: 'Какая жалость!',
+      resultPhraze: 'У вас закончились все попытки. Ничего, повезёт в следующий раз!'
     },
-    'time': {
-      'title': 'Увы и ах!',
-      'resultPhraze': 'Время вышло! Вы не успели отгадать все мелодии'
+    time: {
+      title: 'Увы и ах!',
+      resultPhraze: 'Время вышло! Вы не успели отгадать все мелодии'
     }
   }
 
     let actualFailScreen;
 
       if (this.props.lives === 0) {
-        actualFailScreen = failType['tries'];
+        actualFailScreen = failType.tries;
       } else if (this.props.time === 0) {
-        actualFailScreen = failType['time'];
+        actualFailScreen = failType.time;
       }
 
     return (

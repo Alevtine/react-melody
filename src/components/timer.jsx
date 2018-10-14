@@ -14,6 +14,10 @@ class Timer extends React.Component {
     this.interval = setInterval(this.tick, 1000)
   }
 
+  componentWillUnmount = () => {
+    clearInterval(this.interval);
+  }
+
   tick = () => {
     this.setState({
       seconds: this.state.seconds > 0 || this.state.minutes === 0 ? this.state.seconds - 1 : this.state.seconds = 59
@@ -28,10 +32,6 @@ class Timer extends React.Component {
     this.setState({
       minutes: this.state.seconds === 0 && this.state.minutes > 0 ? this.state.minutes - 1 : this.state.minutes
     })
-  }
-
-  componentWillUnmount = () => {
-    clearInterval(this.interval);
   }
 
   render () {

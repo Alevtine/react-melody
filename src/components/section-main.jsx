@@ -74,7 +74,7 @@ class SectionMain extends React.Component {
 
   saveResult = () => {
     const gameScores = this.state.scores;
-    const url = 'https://es.dump.academy/guess-melody/stats/468135';
+    const url = 'https://es.dump.academy/guess-melody/stats/';
     return fetch(url, {
       method: 'POST',
       headers: {
@@ -87,7 +87,7 @@ class SectionMain extends React.Component {
 
     loadStats () {
       const url = 'https://es.dump.academy/guess-melody/stats/468135';
-      fetch(url, {
+      return fetch(url, {
         method: 'GET'
       })
       .then(this.checkStatus)
@@ -202,8 +202,8 @@ class SectionMain extends React.Component {
           if (this.isAlive() && !this.isLast()) {
             actualScreen = screenKind['GameScreen'];
           } else if (this.isAlive() && this.isLast()) {
-            this.saveResult();
-            this.loadStats();
+            this.saveResult()
+            .then(this.loadStats());
           } else {
             actualScreen = screenKind['ResultFail'];
           }
