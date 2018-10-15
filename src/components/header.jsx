@@ -5,7 +5,7 @@ import ResetButton from './reset-button';
 
 class Header extends React.Component {
   render() {
-    const { lives, livesTotal, time } = this.props;
+    const { lives, time } = this.props;
     return (
       <header className="game__header">
         <ResetButton startPlay={this.props.startPlay} />

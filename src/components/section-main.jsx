@@ -54,13 +54,18 @@ class SectionMain extends React.Component {
 
   saveResult = () => {
     const gameScores = this.state.scores;
-    const url = 'https://es.dump.academy/guess-melody/stats/468135';
+    const url = 'https://es.dump.academy/guess-melody/stats/468130';
     return fetch(url, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify({ scores: gameScores })
+    })
+    .then(this.checkStatus)
+    .then(response => {
+      console.log(response)
+      this.loadStats();
     })
       .catch((err) => {
         this.setState({
@@ -72,7 +77,7 @@ class SectionMain extends React.Component {
 
 
     loadStats () {
-      const url = 'https://es.dump.academy/guess-melody/stats/468135';
+      const url = 'https://es.dump.academy/guess-melody/stats/468130';
       return fetch(url, {
         method: 'GET'
       })
@@ -89,7 +94,6 @@ class SectionMain extends React.Component {
 
     ratePlayer (data) {
       const allPlayersPoints = data.map(item => item.scores);
-      allPlayersPoints.push(this.state.scores)
       const ratedResults = allPlayersPoints.sort((a,b) => b - a);
       const playerPlace = ratedResults.findIndex(item => item === this.state.scores) + 1;
       const rating = Math.floor(100 - playerPlace * 100 / ratedResults.length);
@@ -217,8 +221,7 @@ class SectionMain extends React.Component {
           if (this.isAlive() && !this.isLast()) {
             actualScreen = screenKind['GameScreen'];
           } else if (this.isAlive() && this.isLast()) {
-            this.saveResult()
-            .then(this.loadStats());
+            this.saveResult();
           } else {
             actualScreen = screenKind['ResultFail'];
           }
