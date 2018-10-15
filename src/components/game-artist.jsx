@@ -1,27 +1,39 @@
 import React from 'react';
 
-
 class GameArtist extends React.Component {
+
+  componentDidMount = () => {
+    this.props.stop()
+    this.props.start()
+  }
 
   handleChange = (event) => {
     const {
       currentQuestion: { answers },
       calculateScore,
       takeLife,
-      nextLevel
+      nextLevel,
+      bonusTime,
+      stop
     } = this.props;
 
     const correctAnswerIdx = answers.findIndex(answer => answer.isCorrect === true);
     const userAnswer = +event.target.id.match(/\d+$/g);
     const wrongScore = -2;
-    const rightScore = 6;
+    let rightScore = 1;
+    let fastFlag = false;
 
     if (userAnswer === correctAnswerIdx) {
-      calculateScore(rightScore);
+      if (bonusTime > 0) {
+        rightScore += 1;
+        fastFlag = true;
+      }
+      calculateScore(rightScore, fastFlag);
     } else {
       calculateScore(wrongScore);
       takeLife();
     }
+    stop();
     nextLevel();
   }
 

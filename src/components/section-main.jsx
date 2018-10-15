@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Header from './header.jsx';
 import Footer from './footer.jsx';
 import Welcome from './welcome.jsx';
 import GameScreen from './game-screen.jsx';
@@ -17,19 +18,13 @@ class SectionMain extends React.Component {
     level: 1,
     lives: 3,
     time: 300,
+    fastCounter: 0,
     ratingData: null,
     errorInfo: null
   }
 
   beginState = {
     livesTotal: 3,
-  }
-
-  checkStatus = (response) => {
-    if (response.status === 200) {
-      return response;
-    }
-      throw new Error(response.status)
   }
 
   // componentDidMount() {
@@ -50,31 +45,16 @@ class SectionMain extends React.Component {
   //   })
   // }
 
-  calculateScore(x) {
-    this.setState({
-      scores: this.state.scores + x
-    })
-  }
-
-  takeLife() {
-    this.setState({
-      lives: this.state.lives - 1
-    })
-  }
-
-  nextLevel = () => {
-      if (!this.isLast()) {
-      this.nextScreen('GameScreen');
-      this.setState({
-        level: this.state.level + 1
-      })
+  checkStatus = (response) => {
+    if (response.status === 200) {
+      return response;
     }
+      throw new Error(response.status)
   }
-
 
   saveResult = () => {
     const gameScores = this.state.scores;
-    const url = 'https://es.dump.academy/guess-melody/stats/';
+    const url = 'https://es.dump.academy/guess-melody/stats/468131';
     return fetch(url, {
       method: 'POST',
       headers: {
@@ -83,7 +63,6 @@ class SectionMain extends React.Component {
       body: JSON.stringify({ scores: gameScores })
     })
   }
-
 
     loadStats () {
       const url = 'https://es.dump.academy/guess-melody/stats/468135';
@@ -114,6 +93,28 @@ class SectionMain extends React.Component {
       })
     }
 
+    calculateScore(points, fastFlag) {
+      this.setState({
+        scores: this.state.scores + points,
+        fastCounter: fastFlag ? this.state.fastCounter + 1 : this.state.fastCounter
+      })
+    }
+
+    takeLife = () => {
+      this.setState({
+        lives: this.state.lives - 1
+      })
+    }
+
+    nextLevel = () => {
+        if (!this.isLast()) {
+        this.nextScreen('GameScreen');
+        this.setState({
+          level: this.state.level + 1
+        })
+      }
+    }
+
   nextScreen = screen => {
     this.setState({
       actualScreen: screen
@@ -126,7 +127,8 @@ class SectionMain extends React.Component {
       scores: 0,
       level: 1,
       lives: 3,
-      time: 300
+      time: 300,
+      fastCounter: 0
     })
     this.stopTimer()
   }
@@ -160,34 +162,40 @@ class SectionMain extends React.Component {
     return this.state.time === 0;
   }
 
+  renderHeader = () => {
+    return <Header
+      lives={this.state.lives}
+      livesTotal={this.beginState.livesTotal}
+      startPlay={this.startPlay} />
+  }
+
   render() {
 
     const screenKind = {
       'Welcome': <Welcome nextScreen={this.nextScreen.bind(this, 'GameScreen')} />,
       'GameScreen': <GameScreen
+        header={this.renderHeader}
         level={this.state.level}
-        lives={this.state.lives}
         levelsTotal={this.state.questions.length}
-        livesTotal={this.beginState.livesTotal}
         nextScreen={this.nextScreen.bind(this, 'GameScreen')}
-        startPlay={this.startPlay}
         isAlive={this.isAlive}
         isLast={this.isLast}
         nextLevel={this.nextLevel.bind(this)}
         questionsData={this.state.questions}
         scores={this.state.scores}
         calculateScore={this.calculateScore.bind(this)}
-        takeLife={this.takeLife.bind(this)}
-        time={this.state.time}
+        takeLife={this.takeLife}
         startTimer={this.startTimer}
-        stopTimer={this.stopTimer} />,
+        stopTimer={this.stopTimer}
+        time={this.state.time} />,
       'ResultSuccess': <ResultSuccess
         startPlay={this.startPlay}
         stats={this.state.ratingData}
         lives={this.state.lives}
         playerScore={this.state.scores}
         livesTotal={this.beginState.livesTotal}
-        time={this.state.time} />,
+        time={this.state.time}
+        fastCounter={this.state.fastCounter} />,
       'ResultFail': <ResultFail startPlay={this.startPlay} time={this.state.time} lives={this.state.lives} />,
       'ErrorBlock': <ErrorBlock errorInfo={this.state.errorInfo} />
     }
@@ -203,7 +211,7 @@ class SectionMain extends React.Component {
             actualScreen = screenKind['GameScreen'];
           } else if (this.isAlive() && this.isLast()) {
             this.saveResult()
-            .then(this.loadStats());
+           .then(this.loadStats());
           } else {
             actualScreen = screenKind['ResultFail'];
           }

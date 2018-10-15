@@ -2,6 +2,10 @@ import React from 'react';
 
 class GameGenre extends React.Component {
 
+  componentDidMount = () => {
+    this.props.start()
+  }
+
   handleClick = (event) => {
     const {
       currentQuestion: {
@@ -10,7 +14,9 @@ class GameGenre extends React.Component {
       },
       calculateScore,
       takeLife,
-      nextLevel
+      nextLevel,
+      bonusTime,
+      stop
     } = this.props;
 
 
@@ -18,26 +24,33 @@ class GameGenre extends React.Component {
     const checkedAnswers = document.querySelectorAll('input:checked');
     const userAnswers = [];
     const wrongScore = -2;
-    const rightScore = 1;
+    let rightScore = 1;
+    let fastFlag = false;
 
     checkedAnswers.forEach(item => userAnswers.push(item.dataset.genre));
 
     if (userAnswers.length === correctAnswers.length && userAnswers.every(item => item === correctType) === true) {
-      calculateScore(rightScore)
+      if (bonusTime > 0) {
+        rightScore += 1;
+        fastFlag = true;
+      }
+      calculateScore(rightScore, fastFlag);
     } else {
       calculateScore(wrongScore);
       takeLife();
     }
+    stop();
     nextLevel();
   }
 
   render() {
+
     const {
       question: title,
-      answers
+      answers,
     } = this.props.currentQuestion;
 
-    const renderedAnswers = []
+    const renderedAnswers = [];
 
     for (let i = 0; i < answers.length; i++) {
       let answerNode = (

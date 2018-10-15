@@ -1,9 +1,9 @@
 import React from 'react';
 import Question from './question.jsx';
-import Header from './header.jsx';
 
 
 class GameScreen extends React.Component {
+
   componentDidMount = () => {
     if (this.props.level === 1) {
       this.props.startTimer()
@@ -16,13 +16,11 @@ class GameScreen extends React.Component {
 
   render() {
     const currentQuestion = this.props.questionsData[this.props.level - 1];
+    const header = this.props.header();
 
     return (
       <section>
-        <Header lives={this.props.lives}
-          livesTotal={this.props.livesTotal}
-          startPlay={this.props.startPlay}
-          time={this.props.time} />
+        {header}
         <Question
           currentQuestion={currentQuestion}
           nextLevel={this.props.nextLevel}
@@ -30,8 +28,7 @@ class GameScreen extends React.Component {
           scores={this.props.scores}
           lives={this.props.lives}
           calculateScore={this.props.calculateScore}
-          takeLife={this.props.takeLife}
-        />
+          takeLife={this.props.takeLife} />
       </section>
     );
   }
