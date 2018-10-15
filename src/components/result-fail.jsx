@@ -1,5 +1,6 @@
 import React from 'react';
 import ReplayButton from './replay-button.jsx';
+import logo1 from '../img/melody-logo.png';
 
 class ResultFail extends React.Component {
   render() {
@@ -24,7 +25,7 @@ class ResultFail extends React.Component {
 
     return (
       <section className="result">
-        <div className="result__logo"><img src="img/melody-logo.png" alt="Угадай мелодию" width="186" height="83" /></div>
+        <div className="result__logo"><img src={logo1} alt="Угадай мелодию" width="186" height="83" /></div>
         <h2 className="result__title">{actualFailScreen.title}</h2>
         <p className="result__total result__total--fail">{actualFailScreen.resultPhraze}</p>
         <ReplayButton startPlay={this.props.startPlay} />

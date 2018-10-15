@@ -12,8 +12,8 @@
   font-style: normal;
   font-display: swap;
 
-  src: url("../fonts/FiraSans-Light.woff2") format("woff2"),
-    url("../fonts/FiraSans-Light.woff") format("woff");
+  src: url("./fonts/FiraSans-Light.woff2") format("woff2"),
+    url("./fonts/FiraSans-Light.woff") format("woff");
 }
 
 @font-face {
@@ -22,8 +22,8 @@
   font-style: italic;
   font-display: swap;
 
-  src: url("../fonts/FiraSans-LightItalic.woff2") format("woff2"),
-    url("../fonts/FiraSans-LightItalic.woff") format("woff");
+  src: url("./fonts/FiraSans-LightItalic.woff2") format("woff2"),
+    url("./fonts/FiraSans-LightItalic.woff") format("woff");
 }
 
 @font-face {
@@ -32,8 +32,8 @@
   font-style: normal;
   font-display: swap;
 
-  src: url("../fonts/FiraSans-Medium.woff2") format("woff2"),
-    url("../fonts/FiraSans-Medium.woff") format("woff");
+  src: url("./fonts/FiraSans-Medium.woff2") format("woff2"),
+    url("./fonts/FiraSans-Medium.woff") format("woff");
 }
 
 @font-face {
@@ -42,8 +42,8 @@
   font-style: italic;
   font-display: swap;
 
-  src: url("../fonts/FiraSans-MediumItalic.woff2") format("woff2"),
-    url("../fonts/FiraSans-MediumItalic.woff") format("woff");
+  src: url("./fonts/FiraSans-MediumItalic.woff2") format("woff2"),
+    url("./fonts/FiraSans-MediumItalic.woff") format("woff");
 }
 
 *,
@@ -76,7 +76,7 @@ body {
   height: 100%;
   min-height: 1000px;
 
-  background: url("../img/vinyl.png") center no-repeat;
+  background: url("./img/vinyl.png") center no-repeat;
 }
 
 img {

@@ -2,7 +2,7 @@ import React from 'react';
 
 const Lives = (props) => {
   const renderedLives = [];
-  for (let i = 1; i <= props.livesTotal; i++) {
+  for (let i = 1; i <= props.lives; i++) {
     renderedLives.push(<div key={i} className="wrong" />);
   }
 
