@@ -7,13 +7,13 @@ import GameScreen from './game-screen.jsx';
 import ResultFail from './result-fail.jsx';
 import ResultSuccess from './result-success.jsx';
 import ErrorBlock from './error.jsx';
-import gameData from '../data.js';
+//import gameData from '../data.js';
 
 
 class SectionMain extends React.Component {
   state = {
     actualScreen: 'Welcome',
-    questions: gameData,
+    questions: '',
     scores: 0,
     level: 1,
     lives: 3,
@@ -27,23 +27,44 @@ class SectionMain extends React.Component {
     livesTotal: 3,
   }
 
-  // componentDidMount() {
-  //   const url = 'https://es.dump.academy/guess-melody/questions';
-  //   fetch(url, { method: 'GET' })
-  //   .then(this.checkStatus)
-  //   .then(response => response.json())
-  //   .then((data) => {
-  //     this.setState({
-  //       questions: data
-  //     })
-  //   })
-  //   .catch((err) => {
-  //     this.setState({
-  //       actualScreen: 'ErrorBlock',
-  //       errorInfo: err.message
-  //     })
-  //   })
-  // }
+  componentDidMount() {
+    const url = 'https://es.dump.academy/guess-melody/questions';
+    fetch(url, { method: 'GET' })
+    .then(this.checkStatus)
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({
+        questions: data
+      })
+    })
+    .catch((err) => {
+      this.setState({
+        actualScreen: 'ErrorBlock',
+        errorInfo: err.message
+      })
+    })
+  }
+
+  getUrls = (data) => {
+    let tracksArr = data.map(item => item.type === 'artist' ?
+    item.src : item.answers.map(answer => answer.src)).flat()
+    return tracksArr;
+  }
+
+  loadTrack = (url) => {
+    return new Promise((resolve, reject) => {
+      const mp3 = new Audio();
+      mp3.onload = () => resolve(mp3);
+      mp3.onerror = () => reject(`something went wrong with ${url}`);
+      mp3.src = url;
+    })
+  }
+
+  preloadTracks = (gameData) => {
+    const urls = this.getUrls(gameData);
+    const promises = urls.map((url) => this.loadTrack(url));
+    return Promise.all(promises);
+  }
 
   checkStatus = (response) => {
     if (response.status === 200) {
@@ -52,28 +73,28 @@ class SectionMain extends React.Component {
       throw new Error(response.status)
   }
 
-  saveResult = () => {
-    const gameScores = this.state.scores;
-    const url = 'https://es.dump.academy/guess-melody/stats/468130';
-    return fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({ scores: gameScores })
-    })
-    .then(this.checkStatus)
-    .then(response => {
-      console.log(response)
-      this.loadStats();
-    })
+    saveResult = () => {
+      const gameScores = this.state.scores;
+      const url = 'https://es.dump.academy/guess-melody/stats/468130';
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({ scores: gameScores })
+      })
+      .then(this.checkStatus)
+      .then(response => {
+        console.log(response)
+        this.loadStats();
+      })
       .catch((err) => {
         this.setState({
           actualScreen: 'ErrorBlock',
           errorInfo: err.message
         })
       })
-  }
+    }
 
 
     loadStats () {

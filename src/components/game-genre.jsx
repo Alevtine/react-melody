@@ -6,6 +6,20 @@ class GameGenre extends React.Component {
     this.props.start()
   }
 
+  handleSound = (evt) => {
+    const buttons = document.querySelectorAll('.track__button');
+    const audios = document.querySelectorAll('audio');
+    const currentIdx = evt.target.dataset.number;
+    const playClass = 'track__button--play';
+    const pauseClass = 'track__button--pause';
+
+    buttons[currentIdx].classList.contains(playClass) ?
+      buttons[currentIdx].classList.replace(playClass, pauseClass) &&
+      audios[currentIdx].play() :
+      buttons[currentIdx].classList.replace(pauseClass, playClass) &&
+      audios[currentIdx].pause();
+  }
+
   handleClick = (event) => {
     const {
       currentQuestion: {
@@ -55,7 +69,7 @@ class GameGenre extends React.Component {
     for (let i = 0; i < answers.length; i++) {
       let answerNode = (
         <div className="track" key={i}>
-          <button className="track__button track__button--play" type="button" />
+          <button className="track__button track__button--play" data-number={i} type="button" onClick={this.handleSound} />
           <div className="track__status">
             <audio>
               <source preload="auto" src={answers[i].src} type="audio/mpeg" autoPlay />

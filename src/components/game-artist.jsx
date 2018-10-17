@@ -7,6 +7,19 @@ class GameArtist extends React.Component {
     this.props.start()
   }
 
+  handleSound = (evt) => {
+    const audio = document.querySelector('audio');
+    const button = evt.target;
+    const playClass = 'track__button--play';
+    const pauseClass = 'track__button--pause';
+
+    button.classList.contains(playClass) ?
+      button.classList.replace(playClass, pauseClass) &&
+      audio.play() :
+      button.classList.replace(pauseClass, playClass) &&
+      audio.pause();
+  }
+
   handleChange = (event) => {
     const {
       currentQuestion: { answers },
@@ -69,9 +82,9 @@ class GameArtist extends React.Component {
         <section className="game__screen">
           <h2 className="game__title">{title}</h2>
           <div className="game__track">
-            <button className="track__button track__button--play" type="button" />
+            <button className="track__button track__button--play" onClick={this.handleSound} type="button" />
             <audio>
-              <source preload="auto" src={src} type="audio/mpeg" autoPlay />
+              <source preload="auto" src={src} type="audio/mpeg" autoPlay={true} />
             </audio>
           </div>
           <form className="game__artist">
