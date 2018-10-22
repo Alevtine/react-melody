@@ -3,7 +3,8 @@ import React from 'react';
 class GameGenre extends React.Component {
 
   componentDidMount = () => {
-    this.props.start()
+    this.props.start();
+    this.props.stop();
   }
 
   handleSound = (evt) => {
@@ -76,14 +77,12 @@ class GameGenre extends React.Component {
       calculateScore(wrongScore);
       takeLife();
     }
-
     stop();
     nextLevel();
 
   }
 
   render() {
-
     const {
       question: title,
       answers

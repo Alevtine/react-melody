@@ -1,4 +1,5 @@
 import React from 'react';
+import Modal from 'react-modal';
 
 import Header from './header.jsx';
 import Footer from './footer.jsx';
@@ -8,6 +9,8 @@ import ResultFail from './result-fail.jsx';
 import ResultSuccess from './result-success.jsx';
 import ErrorBlock from './error.jsx';
 import gameData from '../data.js';
+
+Modal.setAppElement('body');
 
 
 class SectionMain extends React.Component {
@@ -20,7 +23,8 @@ class SectionMain extends React.Component {
     time: 300,
     fastCounter: 0,
     ratingData: null,
-    errorInfo: null
+    errorInfo: null,
+    isModalOpen: false,
   }
 
   beginState = {
@@ -64,79 +68,79 @@ class SectionMain extends React.Component {
       throw new Error(response.status)
   }
 
-    saveResult = () => {
-      const gameScores = this.state.scores;
-      const url = 'https://es.dump.academy/guess-melody/stats/468130';
-      return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify({ scores: gameScores })
-      })
-      .then(this.checkStatus)
-      .then(response => {
-        console.log(response)
-        this.loadStats();
-      })
-      .catch((err) => {
-        this.setState({
-          actualScreen: 'ErrorBlock',
-          errorInfo: err.message
-        })
-      })
-    }
-
-
-    loadStats () {
-      const url = 'https://es.dump.academy/guess-melody/stats/468130';
-      return fetch(url, {
-        method: 'GET'
-      })
-      .then(this.checkStatus)
-      .then(response => response.json())
-      .then(data => this.ratePlayer(data))
-      .catch((err) => {
-        this.setState({
-          actualScreen: 'ErrorBlock',
-          errorInfo: err.message
-        })
-      })
-    }
-
-    ratePlayer (data) {
-      const allPlayersPoints = data.map(item => item.scores);
-      const ratedResults = allPlayersPoints.sort((a,b) => b - a);
-      const playerPlace = ratedResults.findIndex(item => item === this.state.scores) + 1;
-      const rating = Math.floor(100 - playerPlace * 100 / ratedResults.length);
-      const dataToRender = { playerPlace: playerPlace, rating: rating,  playersQtty: ratedResults.length };
+  saveResult = () => {
+    const gameScores = this.state.scores;
+    const url = 'https://es.dump.academy/guess-melody/stats/468130';
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({ scores: gameScores })
+    })
+    .then(this.checkStatus)
+    .then(response => {
+      console.log(response)
+      this.loadStats();
+    })
+    .catch((err) => {
       this.setState({
-        actualScreen: 'StatScreen',
-        ratingData: dataToRender
+        actualScreen: 'ErrorBlock',
+        errorInfo: err.message
       })
-    }
+    })
+  }
 
-    calculateScore(points, fastFlag) {
+
+  loadStats () {
+    const url = 'https://es.dump.academy/guess-melody/stats/468130';
+    return fetch(url, {
+      method: 'GET'
+    })
+    .then(this.checkStatus)
+    .then(response => response.json())
+    .then(data => this.ratePlayer(data))
+    .catch((err) => {
       this.setState({
-        scores: this.state.scores + points,
-        fastCounter: fastFlag ? this.state.fastCounter + 1 : this.state.fastCounter
+        actualScreen: 'ErrorBlock',
+        errorInfo: err.message
       })
-    }
+    })
+  }
 
-    takeLife = () => {
+  ratePlayer (data) {
+    const allPlayersPoints = data.map(item => item.scores);
+    const ratedResults = allPlayersPoints.sort((a,b) => b - a);
+    const playerPlace = ratedResults.findIndex(item => item === this.state.scores) + 1;
+    const rating = Math.floor(100 - playerPlace * 100 / ratedResults.length);
+    const dataToRender = { playerPlace: playerPlace, rating: rating,  playersQtty: ratedResults.length };
+    this.setState({
+      actualScreen: 'StatScreen',
+      ratingData: dataToRender
+    })
+  }
+
+  calculateScore(points, fastFlag) {
+    this.setState({
+      scores: this.state.scores + points,
+      fastCounter: fastFlag ? this.state.fastCounter + 1 : this.state.fastCounter
+    })
+  }
+
+  takeLife = () => {
+    this.setState({
+      lives: this.state.lives - 1
+    })
+  }
+
+  nextLevel = () => {
+      if (!this.isLast()) {
+      this.nextScreen('GameScreen');
       this.setState({
-        lives: this.state.lives - 1
+        level: this.state.level + 1
       })
     }
-
-    nextLevel = () => {
-        if (!this.isLast()) {
-        this.nextScreen('GameScreen');
-        this.setState({
-          level: this.state.level + 1
-        })
-      }
-    }
+  }
 
   nextScreen = screen => {
     this.setState({
@@ -153,7 +157,10 @@ class SectionMain extends React.Component {
       time: 300,
       fastCounter: 0
     })
-    this.stopTimer()
+    this.stopTimer();
+    if (this.state.isModalOpen) {
+      this.closeModal()
+    }
   }
 
   totalTimeTick = () => {
@@ -186,10 +193,24 @@ class SectionMain extends React.Component {
   }
 
   renderHeader = () => {
-    return <Header
-      lives={this.state.lives}
-      livesTotal={this.beginState.livesTotal}
-      startPlay={this.startPlay} />
+    return (
+      <Header
+        lives={this.state.lives}
+        livesTotal={this.beginState.livesTotal}
+        showModal={this.openModal} />
+      )
+  }
+
+  openModal = () => {
+    this.setState({
+      isModalOpen: true
+    })
+  }
+
+  closeModal = () => {
+    this.setState({
+      isModalOpen: false
+    })
   }
 
   render() {
@@ -210,7 +231,8 @@ class SectionMain extends React.Component {
         takeLife={this.takeLife}
         startTimer={this.startTimer}
         stopTimer={this.stopTimer}
-        time={this.state.time} />,
+        time={this.state.time}
+        startPlay={this.startPlay} />,
       'ResultSuccess': <ResultSuccess
         startPlay={this.startPlay}
         stats={this.state.ratingData}
@@ -223,32 +245,58 @@ class SectionMain extends React.Component {
       'ErrorBlock': <ErrorBlock errorInfo={this.state.errorInfo} />
     }
 
-        let actualScreen;
+    let actualScreen;
 
-        switch(this.state.actualScreen) {
-          case 'Welcome':
-          actualScreen = screenKind['Welcome'];
-          break;
-          case 'GameScreen':
-          if (this.isAlive() && !this.isLast()) {
-            actualScreen = screenKind['GameScreen'];
-          } else if (this.isAlive() && this.isLast()) {
-            this.saveResult();
-          } else {
-            actualScreen = screenKind['ResultFail'];
-          }
-          break;
-          case 'StatScreen':
-          actualScreen = screenKind['ResultSuccess'];
-          break;
-          case 'ErrorBlock':
-          actualScreen = screenKind['ErrorBlock'];
-          break;
-          default: actualScreen = screenKind['ErrorBlock'];
-        }
+    switch(this.state.actualScreen) {
+      case 'Welcome':
+      actualScreen = screenKind['Welcome'];
+      break;
+      case 'GameScreen':
+      if (this.isAlive() && !this.isLast()) {
+        actualScreen = screenKind['GameScreen'];
+      } else if (this.isAlive() && this.isLast()) {
+        this.saveResult();
+      } else {
+        actualScreen = screenKind['ResultFail'];
+      }
+      break;
+      case 'StatScreen':
+      actualScreen = screenKind['ResultSuccess'];
+      break;
+      case 'ErrorBlock':
+      actualScreen = screenKind['ErrorBlock'];
+      break;
+      default: actualScreen = screenKind['ErrorBlock'];
+    }
+
+    const customStyle = {
+      content : {
+        background: 'none',
+        position: 'absolute',
+        border: 'none'
+      },
+      overlay: {
+        backgroundColor: 'none',
+        position: 'absolute'
+      }
+    }
 
     return (
       <section>
+        <Modal
+          isOpen={this.state.isModalOpen}
+          onRequestClose={this.closeModal}
+          style={customStyle}>
+          <section className="modal">
+            <button className="modal__close" type="button" onClick={this.closeModal}><span className="visually-hidden">Закрыть</span></button>
+            <h2 className="modal__title">Подтверждение</h2>
+            <p className="modal__text">Вы уверены что хотите начать игру заново?</p>
+            <div className="modal__buttons">
+              <button className="modal__button button" onClick={this.startPlay}>Ок</button>
+              <button className="modal__button button" onClick={this.closeModal}>Отмена</button>
+            </div>
+          </section>
+        </Modal>
         {actualScreen}
         <Footer />
       </section>

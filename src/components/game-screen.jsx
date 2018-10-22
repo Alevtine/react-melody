@@ -1,7 +1,6 @@
 import React from 'react';
 import Question from './question.jsx';
 
-
 class GameScreen extends React.Component {
 
   componentDidMount = () => {
