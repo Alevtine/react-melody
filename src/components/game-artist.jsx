@@ -54,7 +54,7 @@ class GameArtist extends React.Component {
     const {
       question: title,
       answers,
-      src
+      mp3
     } = this.props.currentQuestion;
 
     const renderedAnswers = [];
@@ -82,10 +82,8 @@ class GameArtist extends React.Component {
         <section className="game__screen">
           <h2 className="game__title">{title}</h2>
           <div className="game__track">
-            <button className="track__button track__button--play" onClick={this.handleSound} type="button" />
-            <audio>
-              <source preload="auto" src={src} type="audio/mpeg" autoPlay={true} />
-            </audio>
+            <button className="track__button track__button--pause" onClick={this.handleSound} type="button" />
+            <audio preload="auto" autoPlay="autoplay">{mp3}</audio>
           </div>
           <form className="game__artist">
             {renderedAnswers}

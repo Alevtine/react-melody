@@ -7,13 +7,13 @@ import GameScreen from './game-screen.jsx';
 import ResultFail from './result-fail.jsx';
 import ResultSuccess from './result-success.jsx';
 import ErrorBlock from './error.jsx';
-//import gameData from '../data.js';
+import gameData from '../data.js';
 
 
 class SectionMain extends React.Component {
   state = {
     actualScreen: 'Welcome',
-    questions: '',
+    questions: gameData,
     scores: 0,
     level: 1,
     lives: 3,
@@ -33,6 +33,13 @@ class SectionMain extends React.Component {
     .then(this.checkStatus)
     .then(response => response.json())
     .then((data) => {
+      data.forEach(question => {
+          if (question.type === 'artist') {
+            question.mp3 = this.loadTrack(question.src)
+          } else if (question.type === 'genre') {
+            question.answers.forEach(answer => answer.mp3 = this.loadTrack(answer.src))
+          }
+      })
       this.setState({
         questions: data
       })
@@ -45,26 +52,10 @@ class SectionMain extends React.Component {
     })
   }
 
-  getUrls = (data) => {
-    let tracksArr = data.map(item => item.type === 'artist' ?
-    item.src : item.answers.map(answer => answer.src)).flat()
-    return tracksArr;
-  }
-
   loadTrack = (url) => {
-    return new Promise((resolve, reject) => {
-      const mp3 = new Audio();
-      mp3.onload = () => resolve(mp3);
-      mp3.onerror = () => reject(`something went wrong with ${url}`);
-      mp3.src = url;
-    })
-  }
+      return <source src={url} type="audio/mpeg" />;
+    }
 
-  preloadTracks = (gameData) => {
-    const urls = this.getUrls(gameData);
-    const promises = urls.map((url) => this.loadTrack(url));
-    return Promise.all(promises);
-  }
 
   checkStatus = (response) => {
     if (response.status === 200) {
