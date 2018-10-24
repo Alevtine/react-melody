@@ -3,7 +3,6 @@ import React from 'react';
 class GameArtist extends React.Component {
 
   componentDidMount = () => {
-    this.props.stop()
     this.props.start()
   }
 
@@ -27,7 +26,7 @@ class GameArtist extends React.Component {
       takeLife,
       nextLevel,
       bonusTime,
-      stop
+      stop,
     } = this.props;
 
     const correctAnswerIdx = answers.findIndex(answer => answer.isCorrect === true);
@@ -54,7 +53,7 @@ class GameArtist extends React.Component {
     const {
       question: title,
       answers,
-      mp3
+      mp3,
     } = this.props.currentQuestion;
 
     const renderedAnswers = [];

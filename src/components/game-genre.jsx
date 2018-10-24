@@ -4,7 +4,6 @@ class GameGenre extends React.Component {
 
   componentDidMount = () => {
     this.props.start();
-    this.props.stop();
   }
 
   handleSound = (evt) => {
@@ -47,13 +46,13 @@ class GameGenre extends React.Component {
     const {
       currentQuestion: {
         genre: correctType,
-        answers
+        answers,
       },
       calculateScore,
       takeLife,
       nextLevel,
       bonusTime,
-      stop
+      stop,
     } = this.props;
 
 
@@ -85,7 +84,7 @@ class GameGenre extends React.Component {
   render() {
     const {
       question: title,
-      answers
+      answers,
     } = this.props.currentQuestion;
 
     const renderedAnswers = [];

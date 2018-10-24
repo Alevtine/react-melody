@@ -12,6 +12,18 @@ import gameData from '../data.js';
 
 Modal.setAppElement('body');
 
+const CUSTOM_STYLE = {
+  content : {
+    background: 'none',
+    position: 'absolute',
+    border: 'none',
+  },
+  overlay: {
+    zIndex: 2,
+    position: 'absolute',
+  }
+}
+
 
 class SectionMain extends React.Component {
   state = {
@@ -269,24 +281,12 @@ class SectionMain extends React.Component {
       default: actualScreen = screenKind['ErrorBlock'];
     }
 
-    const customStyle = {
-      content : {
-        background: 'none',
-        position: 'absolute',
-        border: 'none'
-      },
-      overlay: {
-        backgroundColor: 'none',
-        position: 'absolute'
-      }
-    }
-
     return (
       <section>
         <Modal
           isOpen={this.state.isModalOpen}
           onRequestClose={this.closeModal}
-          style={customStyle}>
+          style={CUSTOM_STYLE}>
           <section className="modal">
             <button className="modal__close" type="button" onClick={this.closeModal}><span className="visually-hidden">Закрыть</span></button>
             <h2 className="modal__title">Подтверждение</h2>
